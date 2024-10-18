@@ -11,8 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     {category: "Happiness", text: "The purpose of our lives is to be happy."}];
 
     function showRandomQuote() {
-        const index = Math.floor(Math.random() * quotes.length);
-        quoteDisplay.innerHTML = `<h2>Category: ${quotes[index].category}</h2><p>Quote: ${quotes[index].text}</p>`; 
+
+        const storedQuotes = localStorage.getItem('quotes');
+        const storedQuotesArray = JSON.parse(storedQuotes);
+        const index = Math.floor(Math.random() * storedQuotesArray.length);
+        quoteDisplay.innerHTML = `<h2>Category: ${storedQuotesArray[index].category}</h2><p>Quote: ${storedQuotesArray[index].text}</p>`; 
     };
 
     function createAddQuoteForm(){
@@ -24,17 +27,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const newQuoteObj = {category: newQuoteCategoryValue , text: newQuoteTextValue};
 
         if(newQuoteTextValue === "" || newQuoteCategoryValue === ""){
-            const error = document.createElement('p');
-            error.innerHTML = "Please fill in all the fields!";
-            quoteDisplay.appendChild(error);
+            alert("Please fill in all fields!");
             return;
         }
         quotes.push(newQuoteObj);
+        localStorage.setItem("quotes",JSON.stringify(quotes));
         newQuoteText.value = "";
         newQuoteCategory.value = "";
-        const success = document.createElement('p');
-        success.innerHTML = "New quote added successfully!";
-        quoteDisplay.appendChild(success);
+        
+        const addedQuote = document.createElement('p');
+        addedQuote.innerHTML = `<h2>Category: ${newQuoteObj.category}</h2><p>Quote: ${newQuoteObj.text}</p>`;
+        quoteDisplay.appendChild(addedQuote);
     };
     function showNewQuote(){
         showRandomQuote();
