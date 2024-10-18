@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const quoteDisplay = document.getElementById("quotedisplay");
+    const quoteDisplay = document.getElementById("quoteDisplay");
     const newQuote = document.getElementById("newQuote");
 
     const quotes = [{category: "loveQuote", text: "I love JavaScript"},
@@ -7,10 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     {category: "psychologyQuote", text: "No soul is burdened more than it could bear"}];
 
     function showRandomQuote() {
-
+        const index = Math.floor(Math.random() * quotes.length);
+        quoteDisplay.innerHTML = `<h2>Catregory: ${quotes[index].category}</h2><p>Quote: ${quotes[index].text}</p>`; 
     };
 
     function createAddQuoteForm(){
 
     };
+
+    showRandomQuote();
 });
