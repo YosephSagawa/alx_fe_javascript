@@ -24,13 +24,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const newQuoteObj = {category: newQuoteCategoryValue , text: newQuoteTextValue};
 
         if(newQuoteTextValue === "" || newQuoteCategoryValue === ""){
-            alert("Please enter a quote and category");
+            const error = document.createElement('p');
+            error.innerHTML = "Please fill in all the fields!";
+            quoteDisplay.appendChild(error);
             return;
         }
         quotes.push(newQuoteObj);
         newQuoteText.value = "";
         newQuoteCategory.value = "";
-        alert("New quote added successfully!");
+        const success = document.createElement('p');
+        success.innerHTML = "New quote added successfully!";
+        quoteDisplay.appendChild(success);
     };
     function showNewQuote(){
         showRandomQuote();
