@@ -42,6 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function showNewQuote(){
         showRandomQuote();
     };
+
     newQuote.addEventListener("click", showNewQuote);
     addQuoteButton.addEventListener('click',createAddQuoteForm);
+
+    showRandomQuote();
 });
