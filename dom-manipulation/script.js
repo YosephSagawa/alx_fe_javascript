@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     {category: "Life", text: "Life is what happens when you're busy making other plans."},
                     {category: "Motivation", text: "Get busy living or get busy dying."},
                     {category: "Happiness", text: "The purpose of our lives is to be happy."}];
-/*
+
     function showRandomQuote() {
 
         const storedQuotes = localStorage.getItem('quotes');
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const index = Math.floor(Math.random() * storedQuotesArray.length);
         quoteDisplay.innerHTML = `<h2>Category: ${storedQuotesArray[index].category}</h2><p>Quote: ${storedQuotesArray[index].text}</p>`; 
     };
-*/
+
     function createAddQuoteForm(){
         const newQuoteText = document.getElementById('newQuoteText');
         const newQuoteCategory = document.getElementById('newQuoteCategory');
@@ -134,6 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
     newQuote.addEventListener("click", showNewQuote);
     addQuoteButton.addEventListener('click',createAddQuoteForm);
 
-    //showRandomQuote();
+    filterQuotes();
     populateCategories();
 });
