@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       function exportToJSONFile() {
-        const dataStr = JSON.stringify(quotes,null,2);
+        const dataStr = JSON.stringify(JSON.parse(localStorage.getItem('quotes')),null,2);
         const blob = new Blob([dataStr], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
