@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const quoteDisplay = document.getElementById("quoteDisplay");
     const newQuote = document.getElementById("newQuote");
     const addQuoteButton = document.getElementById("addQuoteButton");
+    const exportFileButton = document.getElementById("exportFileButton");
 
     const quotes = [{category: "Love", text: "I love JavaScript"},
                     {category: "Aesthetic", text: "Live your life the way you want to."},
@@ -31,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         quotes.push(newQuoteObj);
-        localStorage.setItem("quotes",JSON.stringify(quotes));
+        saveQuotes();
         newQuoteText.value = "";
         newQuoteCategory.value = "";
         
@@ -42,6 +43,35 @@ document.addEventListener("DOMContentLoaded", () => {
     function showNewQuote(){
         showRandomQuote();
     };
+
+    function saveQuotes(){
+        localStorage.setItem("quotes",JSON.stringify(quotes));
+    }
+
+    function importFromJsonFile(event) {
+        const fileReader = new FileReader();
+        fileReader.onload = function(event) {
+          const importedQuotes = JSON.parse(event.target.result);
+          quotes.push(...importedQuotes);
+          saveQuotes();
+          alert('Quotes imported successfully!');
+        };
+        fileReader.readAsText(event.target.files[0]);
+      }
+
+      function exportToJSONFile() {
+        const dataStr = JSON.stringify(quotes,null,2);
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'quotes.json'; 
+        link.click(); 
+        URL.revokeObjectURL(url);
+      }
+
+      
+    exportFileButton.addEventListener('click', exportToJSONFile);
 
     newQuote.addEventListener("click", showNewQuote);
     addQuoteButton.addEventListener('click',createAddQuoteForm);
