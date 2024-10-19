@@ -94,14 +94,25 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
 
-      function populateCategories(){
+      /**
+       * Populates the select element with categories from the quotes stored in local storage.
+       */
+      function populateCategories() {
+        // Retrieve the select element
         const categoryFilter = document.getElementById('categoryFilter');
+
+        // Retrieve the quotes from local storage and convert them to an array
         const savedQuotes = localStorage.getItem('quotes');
         const savedQuotesArray = JSON.parse(savedQuotes);
-        savedQuotesArray.forEach((quote) => {
+
+        // Create an array of unique categories from the quotes
+        const categories = savedQuotesArray.map(quote => quote.category);
+
+        // Create an option element for each category and append it to the select element
+        categories.forEach(category => {
             const option = document.createElement('option');
-            option.value = quote.category;
-            option.textContent = quote.category;
+            option.value = category;
+            option.textContent = category;
             categoryFilter.appendChild(option);
         });
       }
