@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const newQuote = document.getElementById("newQuote");
     const addQuoteButton = document.getElementById("addQuoteButton");
     const exportFileButton = document.getElementById("exportFileButton");
+    const categoryFilter = document.getElementById('categoryFilter');
 
     const quotes = [{category: "Love", text: "I love JavaScript"},
                     {category: "Aesthetic", text: "Live your life the way you want to."},
@@ -41,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
         quoteDisplay.appendChild(addedQuote);
     };
     function showNewQuote(){
-        showRandomQuote();
+        filterQuotes();
     };
 
     function saveQuotes(){
@@ -98,9 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
        * Populates the select element with categories from the quotes stored in local storage.
        */
       function populateCategories() {
-        // Retrieve the select element
-        const categoryFilter = document.getElementById('categoryFilter');
-
         // Retrieve the quotes from local storage and convert them to an array
         const savedQuotes = localStorage.getItem('quotes');
         const savedQuotesArray = JSON.parse(savedQuotes);
@@ -118,7 +116,16 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       function filterQuotes(){
-
+        const selectedCategory = categoryFilter.value;
+        if(selectedCategory === "all"){
+            showRandomQuote();
+        } else {
+            const storedQuotes = localStorage.getItem('quotes');
+            const storedQuotesArray = JSON.parse(storedQuotes);
+            const filteredQuotes = storedQuotesArray.filter(quote => quote.category === selectedCategory);
+            const index = Math.floor(Math.random() * filteredQuotes.length);
+            quoteDisplay.innerHTML = `<h2>Category: ${filteredQuotes[index].category}</h2><p>Quote: ${filteredQuotes[index].text}</p>`;
+        }
       }
       
     exportFileButton.addEventListener('click', exportToJSONFile);
