@@ -48,28 +48,67 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("quotes",JSON.stringify(quotes));
     }
 
+    /**
+     * Imports quotes from a JSON file and adds them to the existing quotes array.
+     * @param {Event} event The event fired when the user selects a file to import.
+     */
     function importFromJsonFile(event) {
-        const fileReader = new FileReader();
-        fileReader.onload = function(event) {
-          const importedQuotes = JSON.parse(event.target.result);
-          quotes.push(...importedQuotes);
-          saveQuotes();
-          alert('Quotes imported successfully!');
-        };
-        fileReader.readAsText(event.target.files[0]);
-      }
+      const fileReader = new FileReader();
+      fileReader.onload = function(event) {
+        const importedQuotes = JSON.parse(event.target.result);
+        // Add the imported quotes to the existing quotes array
+        quotes.push(...importedQuotes);
+        // Save the updated quotes array to local storage
+        saveQuotes();
+        // Alert the user that the import was successful
+        alert('Quotes imported successfully!');
+      };
+      // Read the selected file as text
+      fileReader.readAsText(event.target.files[0]);
+    }
 
+
+      /**
+       * Exports the quotes stored in local storage to a JSON file.
+       */
       function exportToJSONFile() {
-        const dataStr = JSON.stringify(JSON.parse(localStorage.getItem('quotes')),null,2);
+        // Retrieve quotes from local storage and convert them to a formatted JSON string
+        const dataStr = JSON.stringify(JSON.parse(localStorage.getItem('quotes')), null, 2);
+        
+        // Create a new Blob object containing the JSON data
         const blob = new Blob([dataStr], { type: "application/json" });
+        
+        // Generate a URL for the Blob object
         const url = URL.createObjectURL(blob);
+        
+        // Create a temporary anchor element to initialize the download
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'quotes.json'; 
-        link.click(); 
+        link.download = 'quotes.json';
+
+        // Programmatically click the link to trigger the download
+        link.click();
+        
+        // Revoke the object URL to free up resources
         URL.revokeObjectURL(url);
       }
 
+
+      function populateCategories(){
+        const categoryFilter = document.getElementById('categoryFilter');
+        const savedQuotes = localStorage.getItem('quotes');
+        const savedQuotesArray = JSON.parse(savedQuotes);
+        savedQuotesArray.forEach((quote) => {
+            const option = document.createElement('option');
+            option.value = quote.category;
+            option.textContent = quote.category;
+            categoryFilter.appendChild(option);
+        });
+      }
+
+      function filterQuotes(){
+
+      }
       
     exportFileButton.addEventListener('click', exportToJSONFile);
 
@@ -77,4 +116,5 @@ document.addEventListener("DOMContentLoaded", () => {
     addQuoteButton.addEventListener('click',createAddQuoteForm);
 
     showRandomQuote();
+    populateCategories();
 });
