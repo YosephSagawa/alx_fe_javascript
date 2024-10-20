@@ -144,6 +144,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const index = Math.floor(Math.random() * filteredQuotes.length);
         quoteDisplay.innerHTML = `<h2>Category: ${filteredQuotes[index].category}</h2><p>Quote: ${filteredQuotes[index].text}</p>`;
       }
+
+      async function postToAPI(quotes){
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(quotes)
+        });
+        const data = await response.json();
+      }
+
+      async function fetchQuotesFromApi(){
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+        const data = await response.json();
+        return data;
+      }
       
     exportFileButton.addEventListener('click', exportToJSONFile);
 
