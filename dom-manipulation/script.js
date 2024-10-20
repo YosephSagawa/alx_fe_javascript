@@ -41,6 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
         addedQuote.innerHTML = `<h2>Category: ${newQuoteObj.category}</h2><p>Quote: ${newQuoteObj.text}</p>`;
         quoteDisplay.appendChild(addedQuote);
     };
+
+    
     function showNewQuote(){
         filterQuotes();
     };
@@ -128,12 +130,27 @@ document.addEventListener("DOMContentLoaded", () => {
             quoteDisplay.innerHTML = `<h2>Category: ${filteredQuotes[index].category}</h2><p>Quote: ${filteredQuotes[index].text}</p>`;
         }
       }
+
+      
+      
+      
+      function categoryView(){
+        const firstCategory = localStorage.getItem('LastSelectedCategory');
+        categoryFilter.value = firstCategory;
+        console.log(firstCategory);
+        const storedQuotes = localStorage.getItem('quotes');
+        const storedQuotesArray = JSON.parse(storedQuotes);
+        const filteredQuotes = storedQuotesArray.filter(quote => quote.category === firstCategory);
+        const index = Math.floor(Math.random() * filteredQuotes.length);
+        quoteDisplay.innerHTML = `<h2>Category: ${filteredQuotes[index].category}</h2><p>Quote: ${filteredQuotes[index].text}</p>`;
+      }
       
     exportFileButton.addEventListener('click', exportToJSONFile);
 
     newQuote.addEventListener("click", showNewQuote);
     addQuoteButton.addEventListener('click',createAddQuoteForm);
 
-    filterQuotes();
     populateCategories();
+    categoryView();
+    
 });
