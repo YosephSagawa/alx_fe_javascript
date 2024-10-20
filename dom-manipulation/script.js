@@ -146,22 +146,47 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       async function postToAPI(quotes){
-        const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(quotes)
-        });
-        const data = await response.json();
+        try{
+          const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(quotes)
+          });
+          const data = await response.json();
+        }catch{
+          console.log("error");
+        }
       }
 
       async function fetchQuotesFromServer(){
-        const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-        const data = await response.json();
-        return data;
+        try{
+          const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+          const serverQuotes = await response.json();
+          return serverQuotes;
+        } catch (error){
+          console.error('Error fetching server quotes:' , error);
+        }
+      }
+
+      setInterval(async () => {
+        const serverQuotes = await fetchQuotesFromServer();
+        syncQuotes(serverQuotes);
+      },3000);
+
+      function syncQuotes(){
+        let localQuotes = JSON.parse(localStorage.getItem('quotes')) || [];
+        const mergedQuotes = resolveConflicts(localQuotes, serverQuotes);
+        localStorage.setItem('quotes', JSON.stringify(mergedQuotes));
       }
       
+      function resolveConflicts(localQuotes,serverQuotes){
+        const serverIds = serverQuotes.map(quote => quote.id);
+        const nonConflictLocalQuotes = localQuotes.filter(quote => !serverIds.includes(quote.id));
+        return [...serverQuotes, ...nonConflictLocalQuotes];
+      }
+
     exportFileButton.addEventListener('click', exportToJSONFile);
 
     newQuote.addEventListener("click", showNewQuote);
