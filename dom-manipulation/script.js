@@ -160,6 +160,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
+      postToAPI(quotes);
+
       async function fetchQuotesFromServer(){
         try{
           const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -173,6 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setInterval(async () => {
         const serverQuotes = await fetchQuotesFromServer();
         syncQuotes(serverQuotes);
+        notifyUser("Quotes synced with server!");
       },3000);
 
       function syncQuotes(){
@@ -185,6 +188,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const serverIds = serverQuotes.map(quote => quote.id);
         const nonConflictLocalQuotes = localQuotes.filter(quote => !serverIds.includes(quote.id));
         return [...serverQuotes, ...nonConflictLocalQuotes];
+      }
+
+      function notifyUser(message) {
+        const notificationElement = document.getElementById('notification');
+        notificationElement.textContent = message;
+        notificationElement.style.display = 'block';
+        setTimeout(() => {
+          notificationElement.style.display = 'none';
+        }, 3000);
       }
 
     exportFileButton.addEventListener('click', exportToJSONFile);
